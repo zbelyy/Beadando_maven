@@ -24,14 +24,17 @@ import inf.unideb.hu.beadando_maven.KaloriatablaDDD;
 import inf.unideb.hu.beadando_maven.KaloriatablaDDDImpl;
 
 /**
- * Visszadja egy kaja tápértékét és naplózza azt az aktuális napra.
+ * Visszadja egy kaja tápértékét és naplózza azt az aktuális napra vizuális felület segítségével.
  * @author zbocskay
  */
 public class KaloriaSzamlalo extends javax.swing.JFrame {
+    /**
+     * létrehoz egy statikus Component változót.
+     */
     private static Component frame;
 
     /**
-     * Creates new form KaloriaSzamlalo
+     * az osztály konstruktora.
      */
     public KaloriaSzamlalo() {
         initComponents();
@@ -388,6 +391,10 @@ public class KaloriaSzamlalo extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * lementi az adatbázisba az aznapi kaját a paramétereivel.
+     * @param evt a kiváltott esemény
+     */
     private void countButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_countButtonActionPerformed
         ArrayList<Kaja> val;
         KaloriatablaDDD dao = new KaloriatablaDDDImpl();
@@ -416,7 +423,11 @@ public class KaloriaSzamlalo extends javax.swing.JFrame {
         
         JOptionPane.showMessageDialog(frame, "Lementve az adatbázisba!", "Mentés",JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_countButtonActionPerformed
-
+    
+    /**
+     * kiszámolja a megadott értékek alapján az aktuális kaja tápértékét.
+     * @param evt a kiváltott esemény
+     */
     private void saveButtonCountedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonCountedActionPerformed
         ArrayList<Kaja> val;
         KaloriatablaDDD dao = new KaloriatablaDDDImpl();
@@ -449,7 +460,10 @@ public class KaloriaSzamlalo extends javax.swing.JFrame {
         }
         Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "a megadott értékek alapján a tápanyagbevitel kalkulálása megtörtént!");
     }//GEN-LAST:event_saveButtonCountedActionPerformed
-
+    /**
+     * kilistázza a megadott dátum alapján a napi kajákat.
+     * @param evt a kiváltott esemény
+     */
     private void listKajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listKajaActionPerformed
         KaloriatablaDDD dao = new KaloriatablaDDDImpl();
         if(dao.vane(dateInput.getText())){
@@ -464,6 +478,10 @@ public class KaloriaSzamlalo extends javax.swing.JFrame {
 
     }//GEN-LAST:event_listKajaActionPerformed
 
+        /**
+         * megnyítja az új kaja felvétele az adatbáziba ablakot.
+         * @param evt a kiváltott esemény
+         */
     private void addKajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addKajaActionPerformed
  //       JFrame frames = new JFrame("Button Sample");
         nevText.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -477,22 +495,31 @@ public class KaloriaSzamlalo extends javax.swing.JFrame {
 
         
     }//GEN-LAST:event_addKajaActionPerformed
-
+    /**
+     * a megadott értékek alapján lementi a kaját az új kaját az adatbázisba.
+     * @param evt a kiváltott esemény
+     */
     private void saveKajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveKajaActionPerformed
         KaloriatablaDDD dao = new KaloriatablaDDDImpl();
-        Kaja kaj = new Kaja(nevSaveText.getText(), tryParseF(kaloriaText.getText()),tryParseF(feherjeText.getText()), tryParseF(szenhidratText.getText()));
-        if(!dao.letezik(kaj)){
-        dao.saveKaja(kaj);
-        JOptionPane.showMessageDialog(frame, "Lementve az adatbázisba!", "Mentés",JOptionPane.INFORMATION_MESSAGE);
-        nevSaveText.setText("");
-        kaloriaText.setText("");
-        feherjeText.setText("");
-        szenhidratText.setText("");
-        }else{
+        Kaja kaj = new Kaja(nevSaveText.getText(), tryParseF(kaloriaText.getText()), tryParseF(feherjeText.getText()), tryParseF(szenhidratText.getText()));
+        if (!(dao.letezik(kaj)) && !(nevSaveText.getText().isEmpty())) {
+            dao.saveKaja(kaj);
+            JOptionPane.showMessageDialog(frame, "Lementve az adatbázisba!", "Mentés", JOptionPane.INFORMATION_MESSAGE);
+            nevSaveText.setText("");
+            kaloriaText.setText("");
+            feherjeText.setText("");
+            szenhidratText.setText("");
+        } else {
             Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Hiba:  létező kaja!");
-            JOptionPane.showMessageDialog(frame, "Már létezik ilyen kaja", "Hiba:  létező kaja",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Már létezik ilyen kaja", "Hiba:  létező kaja", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_saveKajaActionPerformed
+
+    /**
+     * szöveget alakít át számma.
+     * @param text a megadott szöveg
+     * @return visszadja a létrehozott számot
+     */
 public static Integer tryParse(String text) {
   try {
       if(text.isEmpty()){
@@ -509,6 +536,11 @@ public static Integer tryParse(String text) {
       JOptionPane.showMessageDialog(frame, "Hibás érték, adjon meg egy számot!", "Hiba",JOptionPane.ERROR_MESSAGE); 
     return null;}
   }
+/**
+ * szöveget alakít át számmá, tört értékkel.
+     * @param text a megadott szöveg
+     * @return visszadja a létrehozott számot
+ */
 public static Float tryParseF(String text) {
   try {
       if(text.isEmpty()){
@@ -528,7 +560,10 @@ public static Float tryParseF(String text) {
      */
 
 
-    
+    /**
+     * a programunk Main metódusa.
+     * @param args az argumentumok
+     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -554,7 +589,9 @@ public static Float tryParseF(String text) {
         //</editor-fold>
         /* Create and display the form */
 
-
+        /**
+         * a vizuális felületünk futtatása.
+         */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new KaloriaSzamlalo().setVisible(true);

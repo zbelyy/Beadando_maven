@@ -16,14 +16,24 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * a program napszak osztálya, tartalmazza egy nap 3 napszakának elnevezését és azonosítóját.
  * @author zbocskay
  */
 public class Napszak {
-
+        /**
+         * a napszak azonosítója.
+         */
         protected int id;
+        /**
+         * a napszak neve.
+         */
         protected String napszak;
 
+        /**
+         * a napszak metódusa.
+         * @param id azonosító
+         * @param napszak napszak neve
+         */
     public Napszak(int id, String napszak) {
         this.id = id;
         this.napszak = napszak;
@@ -31,15 +41,24 @@ public class Napszak {
 
 
 
-
+    /**
+     * visszaadja az azonosítót.
+     * @return azonosító
+     */
     public int getId() {
         return id;
     }
-
+    /**
+     * visszaadja a napszakot.
+     * @return napszak
+     */
     public String getNapszak() {
         return napszak;
     }
-
+    /**
+     * kiírja a napszakot a kért formátumban.
+     * @return napszak
+     */
     @Override
     public String toString() {
         return napszak;

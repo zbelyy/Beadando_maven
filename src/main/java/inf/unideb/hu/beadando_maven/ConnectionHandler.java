@@ -11,20 +11,36 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- *
+ * Megvalósítja az adatbázissal való kommunikálást.
  * @author zbocskay
  */
 public class ConnectionHandler {
+    /**
+     * Statikus Connection adattag.
+     */
     private static Connection conn;
-    
+    /**
+     * a felhasználónév beállítása.
+     */
     private static String userName = "H_IRD0M4";
+    /**
+     * jelszó megadása.
+     */
     private static String password = "kassai";
-    
+    /**
+     * adatbázis elérése.
+     */
     private static final String ORACLE_DB = "jdbc:oracle:thin:@db.inf.unideb.hu:1521:ora11g";
-
+    
+    /**
+     * üres metódus definiálása.
+     */
     public ConnectionHandler() {
     }
-    
+    /**
+     * kapcsolat felépítése az adatbázissal.
+     * @return kapcsolat létrehozva
+     */
     public static Connection getConnection(){
         if(conn == null){
             try{
@@ -44,6 +60,9 @@ public class ConnectionHandler {
         }
         return conn;
     }
+    /**
+     * bezárja a kapcsolatot az adatbázissal.
+     */
     public static void closeConnection(){
         if ( conn != null ){
             try{

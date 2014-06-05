@@ -24,12 +24,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Implementálja az összes metódust, amit a program használ.
  * @author zbocskay
  */
 public class KaloriatablaDDDImpl extends ConnectionHandler implements KaloriatablaDDD {
+    /**
+     * felépíti az adatbázissal a kommunikációt.
+     */
     protected Connection conn = ConnectionHandler.getConnection();
-    
+    /**
+     * Kilistázza az adatbázisban található összes kaját.
+     * @return visszaad egy lsitát az adatbázisban található kajákról
+     */
     @Override
     public ArrayList<Kaja> getKajak(){
         ArrayList<Kaja> kajalista = new ArrayList<Kaja>();
@@ -48,7 +54,12 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
         Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "kajalista sikeresen létrehozva az összes adatbázisban tárolt kajából");
         return kajalista;
     }
-    
+    /**
+     * Azonosító alapján visszaad egy kaját.
+     * @param azon a keresendő kaja azonosítója
+     * @param x a kaja mennyisége
+     * @return a keresett kaját adja vissza
+     */
     @Override
     public Kaja getKajabyazon(int azon, int x) {
         String SQLText = String.format("select * from kaja where id=%d", azon);
@@ -63,7 +74,11 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
             return null;
         }
     }
-
+    /**
+     * felvesz egy új kaját az adatbázisba.
+     * @param kaja megkap egy kaja objektumot
+     * @return a felvett kaját adja vissza
+     */
     @Override
     public Kaja saveKaja(Kaja kaja) {
         String SQLText = String.format("insert into kaja (NEV,KALORIA,FEHERJE,SZENHIDRAT) values (?,?,?,?)");
@@ -94,7 +109,11 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
         }        
 
     }
-
+    /**
+     * naplózza az aktuális napon elfogyasztott kaját.
+     * @param kapcsolo egy kapcsolo objektumot kap meg, ami tartalmazza a kaját, napszakot és mennyiségét
+     * @return a kapcsolo objektumot adja vissza
+     */
     @Override
     public Kapcsolo setKajabyDate(Kapcsolo kapcsolo) {
         String SQLText = String.format("insert into kapcsolo (NAPSZAKID,KAJAID,MENNYISEG,DATUM) values (?,?,?,?)");
@@ -126,7 +145,11 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
         }
         
     }
-        
+        /**
+         * egy dátum alapján kilistázza az aznap elfogyasztott kaját és minden tulajdonságát.
+         * @param date megkapja a dátumot
+         * @return kilistázza a kajákat
+         */
     @Override
     public String getKajabyDate(String date) {
         ArrayList kajak = new ArrayList();
@@ -149,18 +172,31 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
         }
         return null;
     }
-
+    /**
+     * megvizsgálja, hogy létezik e már a vizsgált kaja az adatbázisban.
+     * @param kaja a vizsgálni kívánt kaját kapja meg
+     * @return igaz vagy hamis értékkel tér vissza a kaja létezéséhez igazodva
+     */
     @Override
     public boolean letezik(Kaja kaja) {
         for(Kaja item: getKajak()){
-            if(item.equals(kaja))
+            if(item.equals(kaja)){
                 Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "azonos nevű kaja már létezik");
-                return true;
+                return true;}
+            else if (kaja == null){
+                Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Üres érték, adj meg egy kaját");
+                    return true;
+                }
+                
         }
         Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Kaja ellenőrzése megtörtént név alapján, a vizsgált érték még nem foglalt");
         return false;
     }
-
+    /**
+     * megadja az adott napszakot azonosító alapján.
+     * @param id a napszak azonosítóját kapja meg
+     * @return visszadja a napszakot amit az azonosító alapján bekérünk
+     */
     @Override
     public Napszak getNapszak(int id) {
         String SQLText = String.format("select * from napszak where id=%d", id);
@@ -176,7 +212,11 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
         }
         return null;
     }
-
+    /**
+     * megvizsgálja, hogy létezik e a beírt dátum az adatbázisban.
+     * @param s egy szöeg típusú dátum
+     * @return igaz vagy hamis értékkel tér vissza a dátum létezéséhez viszonyítva
+     */
     @Override
     public boolean vane(String s) {
         String SQLText = String.format("select DATUM from kapcsolo");
