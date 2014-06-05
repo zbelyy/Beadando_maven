@@ -162,7 +162,7 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
             
             while(rs.next()){
                     Kaja kaja = getKajabyazon(rs.getInt("KAJAID"), rs.getInt("MENNYISEG"));
-                    szoveg += String.format("%-23s %-7s %-7s %-10s %-7s %-9s %-10s %n", kaja.getNev(), kaja.getKaloria(), kaja.getFeherje(), kaja.getSzenhidrat(), getNapszak(rs.getInt("NAPSZAKID")),rs.getInt("MENNYISEG"), date );
+                    szoveg += String.format("%-23s %-7.6s %-7.6s %-10.6s %-7s %-9s %-10s %n", kaja.getNev(), kaja.getKaloria(), kaja.getFeherje(), kaja.getSzenhidrat(), getNapszak(rs.getInt("NAPSZAKID")),rs.getInt("MENNYISEG"), date );
          //           szoveg += kaja.getNev()+ "\t\t"+kaja.getKaloria()+"\t"+kaja.getFeherje()+"\t"+kaja.getSzenhidrat()+"\t"+getNapszak(rs.getInt("NAPSZAKID"))+"\t"+rs.getInt("MENNYISEG")+"\t"+date+"\n";
             }
             Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "kaják sikeresen kilistázva megadott dátum szerint");

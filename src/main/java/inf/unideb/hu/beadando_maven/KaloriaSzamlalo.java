@@ -399,29 +399,36 @@ public class KaloriaSzamlalo extends javax.swing.JFrame {
         ArrayList<Kaja> val;
         KaloriatablaDDD dao = new KaloriatablaDDDImpl();
         val = dao.getKajak();
+        int bull = 0;
         for ( Kaja kaj:val){
             if( kaj.getNev().equals((String) jList1.getSelectedValue()) && tryParse(grammReggelField.getText()) > 0 ){
                 Kapcsolo kapcs;
                 kapcs = new Kapcsolo(dao.getKajabyazon(kaj.getId(),tryParse(grammReggelField.getText()) ), dao.getNapszak(1), tryParse(grammReggelField.getText()));
 
                 dao.setKajabyDate(kapcs);
+                bull =1;
             }
             if( kaj.getNev().equals((String) jList2.getSelectedValue()) && tryParse(grammDelField.getText()) > 0 ){
                 Kapcsolo kapcs;
                 kapcs = new Kapcsolo(dao.getKajabyazon(kaj.getId(),tryParse(grammDelField.getText()) ), dao.getNapszak(2), tryParse(grammDelField.getText()));
 
                 dao.setKajabyDate(kapcs);
+                bull =1;
             }
             if( kaj.getNev().equals((String) jList3.getSelectedValue()) && tryParse(grammEsteField.getText()) > 0){
                 Kapcsolo kapcs;
                 kapcs = new Kapcsolo(dao.getKajabyazon(kaj.getId(),tryParse(grammEsteField.getText()) ), dao.getNapszak(3), tryParse(grammEsteField.getText()));
 
                 dao.setKajabyDate(kapcs);
+                bull =1;
             }
 
         }
-        
+        if (bull == 1){
         JOptionPane.showMessageDialog(frame, "Lementve az adatbázisba!", "Mentés",JOptionPane.INFORMATION_MESSAGE);
+        } else{
+            JOptionPane.showMessageDialog(frame, "Válassz ki legaláb egy kaját a listából!", "Üres érték",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_countButtonActionPerformed
     
     /**
@@ -509,7 +516,9 @@ public class KaloriaSzamlalo extends javax.swing.JFrame {
             kaloriaText.setText("");
             feherjeText.setText("");
             szenhidratText.setText("");
-        } else {
+        } else if (nevSaveText.getText().isEmpty()){
+            JOptionPane.showMessageDialog(frame, "Üres érték, adj meg egy kaját", "Üres érték", JOptionPane.ERROR_MESSAGE);
+        }else{
             Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Hiba:  létező kaja!");
             JOptionPane.showMessageDialog(frame, "Már létezik ilyen kaja", "Hiba:  létező kaja", JOptionPane.ERROR_MESSAGE);
         }
@@ -546,9 +555,9 @@ public static Float tryParseF(String text) {
       if(text.isEmpty()){
           Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "A mező értéke üres!");
           return 0.0f;
-      }else
+      }else{
           Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Szöveg átkonvertálva!");
-    return new Float(text);
+    return new Float(text);}
   } 
   catch (NumberFormatException e) {
       Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Hibás érték súly bevitelénél!");
