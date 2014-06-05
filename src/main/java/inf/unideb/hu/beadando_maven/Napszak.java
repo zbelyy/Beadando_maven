@@ -12,8 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  * a program napszak osztálya, tartalmazza egy nap 3 napszakának elnevezését és azonosítóját.

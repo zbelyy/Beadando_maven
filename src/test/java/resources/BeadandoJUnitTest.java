@@ -7,6 +7,7 @@ package resources;
 
 import inf.unideb.hu.beadando_maven.ConnectionHandler;
 import inf.unideb.hu.beadando_maven.Kaja;
+import inf.unideb.hu.beadando_maven.KaloriaSzamlalo;
 import inf.unideb.hu.beadando_maven.Kapcsolo;
 import inf.unideb.hu.beadando_maven.Napszak;
 import java.sql.Connection;
@@ -17,8 +18,6 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import inf.unideb.hu.beadando_maven.KaloriatablaDDD;
 import inf.unideb.hu.beadando_maven.KaloriatablaDDDImpl;
 import org.junit.After;
@@ -27,6 +26,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -34,6 +35,7 @@ import org.junit.Test;
  */
 public class BeadandoJUnitTest {
     protected Connection conn = ConnectionHandler.getConnection();
+    private static Logger logger = LoggerFactory.getLogger(BeadandoJUnitTest.class);
     public BeadandoJUnitTest() {
     }
     
@@ -55,9 +57,9 @@ public class BeadandoJUnitTest {
             Statement load = conn.createStatement();
             load.executeQuery(sql);
             load.executeQuery(sql1);
-            Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "teszt során létrehozott értékek visszaállítása");
+            logger.info("teszt során létrehozott értékek visszaállítása");
         }catch(SQLException e){
-            Logger.getLogger(Kaja.class.getName()).log(Level.SEVERE, null, e);
+            logger.error("a létrehozott értékek visszaállítása sikertelen");
         }
     }
     @Test
@@ -67,7 +69,7 @@ public class BeadandoJUnitTest {
         ddd.saveKaja(kaj);
         
         assertEquals(kaj, ddd.getKajabyazon(kaj.getId(), 100));
-        Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "a megadott kaja tárolva és azonosító szerint visszakeresve az adatbázisból");
+        logger.info("a megadott kaja tárolva és azonosító szerint visszakeresve az adatbázisból");
     }
     
     @Test
@@ -78,7 +80,7 @@ public class BeadandoJUnitTest {
         String date = new SimpleDateFormat("yyyy.MM.dd").format(Calendar.getInstance().getTime());
         assertEquals(date, kapcs.getDate());
         assertEquals(0, kapcs.getId());
-        Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "kapcsolo létrehozása aktuális dátummal sikeresen megtörtént, ill. adatbázis mentés nulla súlyérték eseten sikertelen");
+        logger.info("kapcsolo létrehozása aktuális dátummal sikeresen megtörtént, ill. adatbázis mentés nulla súlyérték eseten sikertelen");
     }
      @Test
     public void getKajabyDateTest() throws ClassNotFoundException{
@@ -88,7 +90,7 @@ public class BeadandoJUnitTest {
         ddd.setKajabyDate(kapcs);
         
         assertEquals(true, ddd.getKajabyDate(date).contains(kapcs.getKaja().getNev()));
-        Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "az aktuális dátummal létrehozott kapcsolo megtalálató az aktuális dátum alatt az adatbázis táblában!");
+        logger.info("az aktuális dátummal létrehozott kapcsolo megtalálató az aktuális dátum alatt az adatbázis táblában!");
     }
     
     @Test
@@ -96,7 +98,7 @@ public class BeadandoJUnitTest {
         KaloriatablaDDD ddd = new KaloriatablaDDDImpl();
         Kaja kaj = ddd.getKajabyazon(1, 100);
         assertEquals(true, ddd.letezik(kaj));
-        Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "a vizsgált kaja létezik az adatbáziban");
+        logger.error("a vizsgált kaja létezik az adatbáziban");
     }
        @Test
     public void getNapszakTest() throws ClassNotFoundException{

@@ -20,8 +20,9 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Implementálja az összes metódust, amit a program használ.
@@ -33,9 +34,14 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
      */
     protected Connection conn = ConnectionHandler.getConnection();
     /**
+     * példányosítja a loggert.
+     */
+    private static Logger logger = LoggerFactory.getLogger(KaloriatablaDDDImpl.class);
+    /**
      * Kilistázza az adatbázisban található összes kaját.
      * @return visszaad egy lsitát az adatbázisban található kajákról
      */
+ 
     @Override
     public ArrayList<Kaja> getKajak(){
         ArrayList<Kaja> kajalista = new ArrayList<Kaja>();
@@ -49,9 +55,9 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
             } 
 
         } catch (SQLException ex) {
-            Logger.getLogger(Kaja.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("Nem tudja létrehozni a kajalistát");
         }
-        Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "kajalista sikeresen létrehozva az összes adatbázisban tárolt kajából");
+        logger.info("kajalista sikeresen létrehozva az összes adatbázisban tárolt kajából");
         return kajalista;
     }
     /**
@@ -67,10 +73,10 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
             Statement stmnt = conn.createStatement();
             ResultSet rs = stmnt.executeQuery(SQLText);
             rs.next();
-            Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Kaja azonosítása sikeres");
+            logger.info("Kaja azonosítása sikeres");
             return new Kaja(rs.getInt("ID"),rs.getString("NEV"), rs.getFloat("KALORIA")*x/100, rs.getFloat("FEHERJE")*x/100, rs.getFloat("SZENHIDRAT")*x/100);
         }catch(SQLException e){
-            Logger.getLogger(Kaja.class.getName()).log(Level.SEVERE, null, e);
+            logger.error("nem tudja beazonosítani a kaját");
             return null;
         }
     }
@@ -97,10 +103,10 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
                         ResultSet rs = load.executeQuery(sql);
                         rs.next();
                         kaja.setId(rs.getInt("ID"));
-                        Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "A megadott kaja felvéve az adatbázisba új kaja-ként!");
+                        logger.info("A megadott kaja felvéve az adatbázisba új kaja-ként!");
                         return kaja;
                       }catch(SQLException e){
-                            Logger.getLogger(Kaja.class.getName()).log(Level.SEVERE, null, e);
+                            logger.error("nem tudja lementeni a kaját az adatbázisba");
                             return null;
                         }
         }else{
@@ -133,14 +139,14 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
                         ResultSet rs = load.executeQuery(sql);
                         rs.next();
                         kapcsolo.setId(rs.getInt("ID"));
-            Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "kapcsolo sikeresen lementve az adatbázisba");
+            logger.info("kapcsolo sikeresen lementve az adatbázisba");
             return kapcsolo;
             }else
-                Logger.getLogger(Kapcsolo.class.getName()).log(Level.WARNING, "kapcsolo mentése sikertelen, nem adott meg mennyiséget!");
+                logger.error("kapcsolo mentése sikertelen, nem adott meg mennyiséget!");
                 return null;
             
         }catch (SQLException e){
-            Logger.getLogger(Kapcsolo.class.getName()).log(Level.SEVERE, null, e);
+            logger.error("nem sikerült lementeni a kapcsolot az adatbázisba");
             return null;
         }
         
@@ -165,10 +171,10 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
                     szoveg += String.format("%-23s %-7.6s %-7.6s %-10.6s %-7s %-9s %-10s %n", kaja.getNev(), kaja.getKaloria(), kaja.getFeherje(), kaja.getSzenhidrat(), getNapszak(rs.getInt("NAPSZAKID")),rs.getInt("MENNYISEG"), date );
          //           szoveg += kaja.getNev()+ "\t\t"+kaja.getKaloria()+"\t"+kaja.getFeherje()+"\t"+kaja.getSzenhidrat()+"\t"+getNapszak(rs.getInt("NAPSZAKID"))+"\t"+rs.getInt("MENNYISEG")+"\t"+date+"\n";
             }
-            Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "kaják sikeresen kilistázva megadott dátum szerint");
+            logger.info("kaják sikeresen kilistázva megadott dátum szerint");
             return szoveg;
         }catch(SQLException e){
-            Logger.getLogger(Kapcsolo.class.getName()).log(Level.SEVERE, null, e);            
+            logger.error("nem sikerült kilistázni a kajákat");           
         }
         return null;
     }
@@ -181,15 +187,15 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
     public boolean letezik(Kaja kaja) {
         for(Kaja item: getKajak()){
             if(item.equals(kaja)){
-                Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "azonos nevű kaja már létezik");
+                logger.error("azonos nevű kaja már létezik");
                 return true;}
             else if (kaja == null){
-                Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Üres érték, adj meg egy kaját");
+                logger.error("Üres érték, adj meg egy kaját");
                     return true;
                 }
                 
         }
-        Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Kaja ellenőrzése megtörtént név alapján, a vizsgált érték még nem foglalt");
+        logger.info("Kaja ellenőrzése megtörtént név alapján, a vizsgált érték még nem foglalt");
         return false;
     }
     /**
@@ -204,10 +210,10 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
             Statement stmnt = conn.createStatement();
             ResultSet rs = stmnt.executeQuery(SQLText);
             rs.next();
-            Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "napszak azonosítása sikeres");
+            logger.info("napszak azonosítása sikeres");
             return new Napszak(rs.getInt("ID"), rs.getString("NAPSZAK"));
         }catch(SQLException e){
-            Logger.getLogger(Napszak.class.getName()).log(Level.SEVERE, null, e);
+            logger.error("napszak azonosítása sikertelen");
             
         }
         return null;
@@ -225,11 +231,13 @@ public class KaloriatablaDDDImpl extends ConnectionHandler implements Kaloriatab
             ResultSet rs = stmnt.executeQuery(SQLText);
 
             while(rs.next()){
-                if(rs.getString("DATUM").equals(s))
+                if(rs.getString("DATUM").equals(s)){
+                    logger.info("létezik a vizsgált dátum az adatbázisban");
                 return true;
+                }
             }
         }catch(SQLException e){
-            Logger.getLogger(Kapcsolo.class.getName()).log(Level.SEVERE, null, e);
+            logger.error("nem találja a dátumot az adatbázisban");
                     return false;
     }return false;
         }

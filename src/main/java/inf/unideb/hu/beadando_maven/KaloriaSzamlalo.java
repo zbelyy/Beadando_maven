@@ -11,8 +11,8 @@ import java.awt.Component;
 import java.awt.Container;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
@@ -32,6 +32,10 @@ public class KaloriaSzamlalo extends javax.swing.JFrame {
      * létrehoz egy statikus Component változót.
      */
     private static Component frame;
+    /**
+     * példányosítja a loggert.
+     */
+    private static Logger logger = LoggerFactory.getLogger(KaloriaSzamlalo.class);
 
     /**
      * az osztály konstruktora.
@@ -406,6 +410,7 @@ public class KaloriaSzamlalo extends javax.swing.JFrame {
                 kapcs = new Kapcsolo(dao.getKajabyazon(kaj.getId(),tryParse(grammReggelField.getText()) ), dao.getNapszak(1), tryParse(grammReggelField.getText()));
 
                 dao.setKajabyDate(kapcs);
+                logger.info("a reggeli kajaérték naplózva az adatbázisban");
                 bull =1;
             }
             if( kaj.getNev().equals((String) jList2.getSelectedValue()) && tryParse(grammDelField.getText()) > 0 ){
@@ -413,6 +418,7 @@ public class KaloriaSzamlalo extends javax.swing.JFrame {
                 kapcs = new Kapcsolo(dao.getKajabyazon(kaj.getId(),tryParse(grammDelField.getText()) ), dao.getNapszak(2), tryParse(grammDelField.getText()));
 
                 dao.setKajabyDate(kapcs);
+                logger.info("déli kajaérték naplózva az adatbázisban");
                 bull =1;
             }
             if( kaj.getNev().equals((String) jList3.getSelectedValue()) && tryParse(grammEsteField.getText()) > 0){
@@ -420,13 +426,16 @@ public class KaloriaSzamlalo extends javax.swing.JFrame {
                 kapcs = new Kapcsolo(dao.getKajabyazon(kaj.getId(),tryParse(grammEsteField.getText()) ), dao.getNapszak(3), tryParse(grammEsteField.getText()));
 
                 dao.setKajabyDate(kapcs);
+                logger.info("esti kajaérték naplózva az adatbázisban");
                 bull =1;
             }
 
         }
         if (bull == 1){
+            logger.info("a megadott kajaértékek naplózva az adatbázisban");
         JOptionPane.showMessageDialog(frame, "Lementve az adatbázisba!", "Mentés",JOptionPane.INFORMATION_MESSAGE);
         } else{
+            logger.error("nincs kaja kiválasztva a listából");
             JOptionPane.showMessageDialog(frame, "Válassz ki legaláb egy kaját a listából!", "Üres érték",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_countButtonActionPerformed
@@ -447,25 +456,29 @@ public class KaloriaSzamlalo extends javax.swing.JFrame {
                 osszkal += kaj.getKaloria()*tryParse(grammReggelField.getText())/100;
                 osszfeh += kaj.getFeherje()*tryParse(grammReggelField.getText())/100;
                 osszsze += kaj.getSzenhidrat()*tryParse(grammReggelField.getText())/100;
+                logger.info("a reggeli kajaérték tápértékszámolása megtörtént");
             }
             if( kaj.getNev().equals((String) jList2.getSelectedValue())){
                 osszkal += kaj.getKaloria()*tryParse(grammDelField.getText())/100;
                 osszfeh += kaj.getFeherje()*tryParse(grammDelField.getText())/100;
                 osszsze += kaj.getSzenhidrat()*tryParse(grammDelField.getText())/100;
+                logger.info("a déli kajaérték tápértékszámolása megtörtént");
             }
             if( kaj.getNev().equals((String) jList3.getSelectedValue())){
                 osszkal += kaj.getKaloria()*tryParse(grammEsteField.getText())/100;
                 osszfeh += kaj.getFeherje()*tryParse(grammEsteField.getText())/100;
                 osszsze += kaj.getSzenhidrat()*tryParse(grammEsteField.getText())/100;
+                logger.info("az esti kajaérték tápértékszámolása megtörtént");
             }
             kaloriaCountOutput.setText(Float.toString(osszkal));
             feherjeCountOutput.setText(Float.toString(osszfeh));
             szenhidratCoutnOutput.setText(Float.toString(osszsze));
             sulyCountOutput.setText(Float.toString(tryParse(grammReggelField.getText())+tryParse(grammDelField.getText())+tryParse(grammEsteField.getText())));
+            logger.info("az összevont kajaérték tápértékszámolása megtörtént");
             
             
         }
-        Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "a megadott értékek alapján a tápanyagbevitel kalkulálása megtörtént!");
+        logger.info("a megadott értékek alapján a tápanyagbevitel kalkulálása megtörtént!");
     }//GEN-LAST:event_saveButtonCountedActionPerformed
     /**
      * kilistázza a megadott dátum alapján a napi kajákat.
@@ -478,7 +491,7 @@ public class KaloriaSzamlalo extends javax.swing.JFrame {
         kajaLista.setEditable(false);
         kajaLista.setText(kajak);
         }else{
-            Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Hibás érték vagy a dátom nem létezik az adatbázisban!");
+            logger.error("Hibás érték vagy a dátom nem létezik az adatbázisban!");
             JOptionPane.showMessageDialog(frame, "Hibás érték (fromátum: yyyy.mm.dd) vagy a dátom nem létezik az adatbázisban", "Hiba",JOptionPane.ERROR_MESSAGE);
         }
 
@@ -497,7 +510,7 @@ public class KaloriaSzamlalo extends javax.swing.JFrame {
         nevText.setResizable(false);
         nevText.setVisible(true);
         nevText.setLocationRelativeTo(null);
-        Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Új kaja felvételének kezdete");
+        logger.info("Új kaja felvételének kezdete");
 
 
         
@@ -511,15 +524,17 @@ public class KaloriaSzamlalo extends javax.swing.JFrame {
         Kaja kaj = new Kaja(nevSaveText.getText(), tryParseF(kaloriaText.getText()), tryParseF(feherjeText.getText()), tryParseF(szenhidratText.getText()));
         if (!(dao.letezik(kaj)) && !(nevSaveText.getText().isEmpty())) {
             dao.saveKaja(kaj);
+            logger.info("Új kaja lementve az adatbázisba");
             JOptionPane.showMessageDialog(frame, "Lementve az adatbázisba!", "Mentés", JOptionPane.INFORMATION_MESSAGE);
             nevSaveText.setText("");
             kaloriaText.setText("");
             feherjeText.setText("");
             szenhidratText.setText("");
         } else if (nevSaveText.getText().isEmpty()){
+            logger.error("az új kaja mentése sikertelen, mivel nem volt megadva");
             JOptionPane.showMessageDialog(frame, "Üres érték, adj meg egy kaját", "Üres érték", JOptionPane.ERROR_MESSAGE);
         }else{
-            Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Hiba:  létező kaja!");
+            logger.error("Hiba:  létező kaja!");
             JOptionPane.showMessageDialog(frame, "Már létezik ilyen kaja", "Hiba:  létező kaja", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_saveKajaActionPerformed
@@ -534,14 +549,14 @@ public static Integer tryParse(String text) {
       if(text.isEmpty()){
           return 0;
       }else if (Integer.parseInt(text) < 0){
-          Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Hibás érték súly bevitelénél!");
+          logger.error("Hibás érték súly bevitelénél!");
           JOptionPane.showMessageDialog(frame, "Hibás érték, adjon meg egy számot!", "Hiba",JOptionPane.ERROR_MESSAGE);
             return null;
       }else
           return new Integer(text);
   } 
   catch (NumberFormatException e) {
-      Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Hibás érték súly bevitelénél!");
+      logger.error("Hibás érték súly bevitelénél!");
       JOptionPane.showMessageDialog(frame, "Hibás érték, adjon meg egy számot!", "Hiba",JOptionPane.ERROR_MESSAGE); 
     return null;}
   }
@@ -553,14 +568,14 @@ public static Integer tryParse(String text) {
 public static Float tryParseF(String text) {
   try {
       if(text.isEmpty()){
-          Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "A mező értéke üres!");
+          logger.error("A mező értéke üres!");
           return 0.0f;
       }else{
-          Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Szöveg átkonvertálva!");
+          logger.info("Szöveg átkonvertálva!");
     return new Float(text);}
   } 
   catch (NumberFormatException e) {
-      Logger.getLogger(Kapcsolo.class.getName()).log(Level.INFO, "Hibás érték súly bevitelénél!");
+      logger.error("Hibás érték súly bevitelénél!");
       JOptionPane.showMessageDialog(frame, "Hibás érték, adjon meg egy számot!", "Hiba",JOptionPane.ERROR_MESSAGE); 
     return null;}
   }

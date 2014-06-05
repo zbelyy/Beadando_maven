@@ -1,0 +1,28 @@
+23:37:28.954 i.u.h.b.KaloriatablaDDDImpl ERROR - kapcsolo mentése sikertelen, nem adott meg mennyiséget! 
+23:37:29.564 i.u.h.b.KaloriatablaDDDImpl ERROR - azonos nevû kaja már létezik 
+23:37:29.564 resources.BeadandoJUnitTest ERROR - a vizsgált kaja létezik az adatbáziban 
+23:37:29.746 i.u.h.b.KaloriatablaDDDImpl ERROR - azonos nevû kaja már létezik 
+23:37:33.255 i.u.h.b.KaloriatablaDDDImpl ERROR - kapcsolo mentése sikertelen, nem adott meg mennyiséget! 
+23:37:33.937 i.u.h.b.KaloriatablaDDDImpl ERROR - azonos nevû kaja már létezik 
+23:37:33.938 resources.BeadandoJUnitTest ERROR - a vizsgált kaja létezik az adatbáziban 
+23:37:34.148 i.u.h.b.KaloriatablaDDDImpl ERROR - azonos nevû kaja már létezik 
+23:41:06.461 i.u.h.b.KaloriatablaDDDImpl ERROR - azonos nevû kaja már létezik 
+23:41:06.462 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - Hiba:  létezõ kaja! 
+23:41:43.561 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - Hibás érték vagy a dátom nem létezik az adatbázisban! 
+23:44:32.557 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - nincs kaja kiválasztva a listából 
+23:44:53.418 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - A mezõ értéke üres! 
+23:44:53.419 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - A mezõ értéke üres! 
+23:44:53.419 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - A mezõ értéke üres! 
+23:44:53.478 i.u.h.b.KaloriatablaDDDImpl ERROR - azonos nevû kaja már létezik 
+23:44:53.479 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - Hiba:  létezõ kaja! 
+00:12:17.823 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - Hibás érték vagy a dátom nem létezik az adatbázisban! 
+00:12:22.186 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - Hibás érték vagy a dátom nem létezik az adatbázisban! 
+00:12:32.473 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - A mezõ értéke üres! 
+00:12:32.474 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - A mezõ értéke üres! 
+00:12:32.474 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - A mezõ értéke üres! 
+00:12:32.523 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - az új kaja mentése sikertelen, mivel nem volt megadva 
+00:12:37.513 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - A mezõ értéke üres! 
+00:12:37.513 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - A mezõ értéke üres! 
+00:12:37.513 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - A mezõ értéke üres! 
+00:12:37.566 i.u.h.b.KaloriatablaDDDImpl ERROR - azonos nevû kaja már létezik 
+00:12:37.566 i.u.h.beadando_maven.KaloriaSzamlalo ERROR - Hiba:  létezõ kaja! 
